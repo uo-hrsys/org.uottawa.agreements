@@ -1,0 +1,8 @@
+<plugin id="net.sourceforge.dita4publishers.word2dita">
+
+  <template file="build_transtype-agreement2dita_template.xml"/>
+  
+  <feature extension="dita.conductor.transtype.check" value="agreement2dita" type="txt"/>
+  <feature extension="dita.conductor.target.relative" value="build.xml" type="file"/>
+
+</plugin>

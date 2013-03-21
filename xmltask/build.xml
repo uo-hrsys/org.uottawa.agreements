@@ -1,0 +1,22 @@
+<project basedir=".">
+  
+
+
+	<target name="define.xmlTask">
+
+		<echo>Define xmltask</echo>
+
+		<taskdef 
+			name="xmltask" 
+			classname="com.oopsconsultancy.xmltask.ant.XmlTask"
+			classpath="xmltask.jar"
+		>
+		<classpath>
+    <pathelement location="xmltask.jar"/>
+  </classpath>
+		</taskdef>
+
+
+  </target>
+
+</project>
