@@ -3,7 +3,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:template match="@*|node()">
 		<xsl:choose>
-			<xsl:when test="@langue='en'">
+			<xsl:when test="contains(@langue,'en')">
 			</xsl:when>
 
 			<xsl:otherwise>
