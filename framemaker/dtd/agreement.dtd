@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--DTD for agreement. Typically invoked by
+      <!DOCTYPE  agreement  SYSTEM
+    "C:\agreement\agreement.dtd">
+-->
+
+
+<!--About agreement-->
+
+<!--This EDD has been designed to handle billingual collective agreements.
+ Agreement is the main ElementVersion 18, last modification: May 2011Agreement
+ Childrens******************- article : multiple article could be inserted in
+ the agreement- section : multiple and nested element of the agreement-
+ appendix : mulitple appendix could be added to the document-->
+
+<!ELEMENT agreement  ((preamble | section | article)*, (signature |
+                              appendix | letter)+) >
+<!ATTLIST agreement  Size      (Small|Normal)  #REQUIRED
+                     Period    CDATA     #REQUIRED
+                     titlefr   CDATA     #IMPLIED
+                     titleen   CDATA     #IMPLIED >
+
+<!ELEMENT preamble   ((title, title), section*, leaveBlank?) >
+<!ATTLIST preamble   ID_preamble  ID        #IMPLIED >
+
+<!ELEMENT article    ((title, title), section*, leaveBlank?) >
+<!ATTLIST article    ID_article  ID        #IMPLIED >
+
+<!ELEMENT section    (list | section | (title, title) |
+                              paragraph-numbered | paragraph | table |
+                              tablewBorder | tablewithoutRuling)* >
+
+<!ELEMENT signature  ((paragraph, paragraph) | person)* >
+
+<!ELEMENT person     (#PCDATA | strong | emphasis | strikethrough | sup)*>
+<!ATTLIST person     langue    (fr-ca|en)  #REQUIRED >
+
+<!ELEMENT appendix   ((title, title), (sub-appendix | leaveBlank)*,
+                              signature*) >
+<!ATTLIST appendix   ID_appendix  ID        #IMPLIED >
+
+<!ELEMENT sub-appendix 
+                     (list | sub-appendix | (title, title) |
+                              paragraph-numbered | paragraph | table |
+                              tablewBorder | tablewithoutRuling)* >
+
+<!ELEMENT letter     ((title-prefix, title-prefix)?, (title, title),
+                              (sub-letter | leaveBlank)*, signature?) >
+<!ATTLIST letter     ID_appendix  ID        #IMPLIED >
+
+<!ELEMENT sub-letter (list | sub-letter | (title, title) |
+                              paragraph-numbered | paragraph | table)* >
+
+<!ELEMENT strong     (#PCDATA) >
+
+<!ELEMENT sup        (#PCDATA) >
+
+<!ELEMENT footnote   (#PCDATA) >
+
+<!ELEMENT strikethrough 
+                     (#PCDATA) >
+
+<!ELEMENT emphasis   (#PCDATA) >
+
+<!--title: title ElementChild of:- article- section- appendix-->
+<!ELEMENT title      (#PCDATA) >
+<!ATTLIST title      langue    (fr-ca|en)  #REQUIRED
+                     ID_title  ID        #IMPLIED
+                     prefixMark  (y|n)     #IMPLIED
+                     prefixLineOnly  (y|n)     #IMPLIED >
+
+<!ELEMENT title-prefix 
+                     (#PCDATA) >
+<!ATTLIST title-prefix 
+                     langue    (fr-ca|en)  #REQUIRED
+                     ID_title_prefix  ID        #IMPLIED >
+
+<!ELEMENT paragraph-numbered 
+                     (#PCDATA | strong | emphasis | strikethrough | sup)*>
+<!ATTLIST paragraph-numbered 
+                     langue    (fr-ca|en)  #REQUIRED
+                     ID_paragraph_n  ID        #IMPLIED
+                     prefixMark  (y|n)     #IMPLIED >
+
+<!ELEMENT paragraph  (#PCDATA | strong | emphasis | strikethrough |
+                              footnote | sup)* >
+<!ATTLIST paragraph  langue    (fr-ca|en)  #REQUIRED
+                     ID_paragraph-numbered-t  ID        #IMPLIED
+                     prefixMark  (y|n)     #IMPLIED >
+
+<!--list: List DefinitionNested list are allowedAttributes allows to set list
+ to :- bulleted- Alpha- Numeric- Roman-->
+<!ELEMENT list       (item | list | paragraph | table | tablewBorder |
+                              tablewithoutRuling)* >
+<!ATTLIST list       Type      (Alpha|Alpha-uppercase|Numeric|Dash|Roman|Bullet)  #REQUIRED >
+
+<!ELEMENT item       (#PCDATA | strong | emphasis | strikethrough | sup)*>
+<!ATTLIST item       langue    (fr-ca|en)  #REQUIRED
+                     prefixMark  (y|n)     #IMPLIED >
+
+<!--table: Table element with a standard format .-->
+<!ELEMENT table      (TableTitle?, TableHeading?, TableBody,
+                              TableFooting?) >
+
+<!--tablewithoutRuling: Table element that doesn't contain a title and the
+ rulings between its cells are wiped out. The chosen format is called
+ "Nformat". The table is aligned to the center.-->
+<!ELEMENT tablewithoutRuling 
+                     (TableTitle?, TableHeading?, TableBody,
+                              TableFooting?) >
+
+<!--tablewBorder: Table element that doesn't contain a title; the rulings
+ between its cells and its border except those of the heading row are wiped
+ out. The chosen format is called "Bformat". The table is aligned to the
+ center.-->
+<!ELEMENT tablewBorder 
+                     (TableTitle?, TableHeading?, TableBody,
+                              TableFooting?) >
+
+<!ELEMENT TableFooting 
+                     (TableRow+) >
+
+<!ELEMENT TableTitle (#PCDATA | strong | emphasis | strikethrough | sup)*>
+
+<!ELEMENT TableHeading 
+                     (TableRow+) >
+
+<!ELEMENT TableBody  (TableRow+) >
+
+<!ELEMENT TableRow   (TableCell+) >
+
+<!ELEMENT TableCell  (#PCDATA | strong | emphasis | strikethrough | sup)*>
+
+<!--leaveBlank: lleaveBlank DefinitionAdd a white page-->
+<!ELEMENT leaveBlank EMPTY >
