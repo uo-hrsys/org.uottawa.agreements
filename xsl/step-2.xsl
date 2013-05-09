@@ -179,6 +179,8 @@
 			</xsl:choose>
 		</xsl:variable>
 
+		<!-- prevent list nested in an item to be processed -->
+		<xsl:if test="name(preceding-sibling::*[1]) != 'item'">
 		<xsl:element name="{$element}">
 			<xsl:attribute name="outputclass">
 				<xsl:value-of select="@Type"/>
@@ -186,6 +188,7 @@
 			<!-- select those items that differ from any of their predecessors -->
 			<xsl:apply-templates select="item[not(@type=preceding-sibling::list)]"/>
 		</xsl:element>
+		</xsl:if>
 	</xsl:template>
 
 
@@ -200,11 +203,19 @@
 	<xsl:template match="item">
 		<xsl:element name="li">
 			<xsl:apply-templates select="@*|node()"/>
-			<xsl:if test="following-sibling::list != ''">
+			<xsl:if test="name(following-sibling::*[1]) = 'list'">
+			<xsl:message>
+			***
+			Sequence: <xsl:sequence  select="following-sibling::*[1]"/></xsl:message>
 				<ul>
-					<xsl:for-each select="following-sibling::list">
+					<xsl:for-each select="following-sibling::list[1]/item">
+					<xsl:message>
+					
+					Item : <xsl:value-of select="."/>
+					
+					</xsl:message>
 						<li>
-							<xsl:value-of select="item"/>
+							<xsl:value-of select="."/>
 						</li>
 					</xsl:for-each>
 				</ul>
