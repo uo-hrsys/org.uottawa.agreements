@@ -204,16 +204,9 @@
 		<xsl:element name="li">
 			<xsl:apply-templates select="@*|node()"/>
 			<xsl:if test="name(following-sibling::*[1]) = 'list'">
-			<xsl:message>
-			***
-			Sequence: <xsl:sequence  select="following-sibling::*[1]"/></xsl:message>
 				<ul>
 					<xsl:for-each select="following-sibling::list[1]/item">
-					<xsl:message>
-					
-					Item : <xsl:value-of select="."/>
-					
-					</xsl:message>
+				
 						<li>
 							<xsl:value-of select="."/>
 						</li>
