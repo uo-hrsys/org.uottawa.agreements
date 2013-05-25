@@ -3,22 +3,22 @@
  <!-- import xml task library -->
  <import file="xmltask/build.xml"/>
 
- <dirname property="dita2agreement2Dita.dir" file="${ant.file.dita2agreementToDita}"/>
+  <target name="dita2agreement2Dita.prepare">
+    <dirname property="dita2agreement2Dita.dir" file="${ant.file.dita2agreementToDita}"/>
 
- <property name="temp.dir" value="${output.dir}/temp"/>
+    <property name="temp.dir" value="${output.dir}/temp"/>
+    <property name="src.dir" value="${output.dir}/src"/>
  
-
- <property name="src.dir" value="${output.dir}/src"/>
+    <delete dir="${temp.dir}" />
+    <delete dir="${src.dir}" />
  
- <delete dir="${temp.dir}" />
- <delete dir="${src.dir}" />
- 
- <mkdir dir="${src.dir}"/>
- <mkdir dir="${temp.dir}"/>
+    <mkdir dir="${src.dir}"/>
+    <mkdir dir="${temp.dir}"/>
+  </target>
  
  <target name="dita2agreement2dita" depends="dita2agreement2Dita.init"> </target>
 
- <target name="dita2agreement2Dita.init" depends="define.xmlTask, dita2agreement2Dita.processLanguage"/>
+ <target name="dita2agreement2Dita.init" depends="define.xmlTask, dita2agreement2Dita.prepare, dita2agreement2Dita.processLanguage"/>
 
  <target name="dita2agreement2Dita.processLanguage" description="process agreement conversion in 2 languages">
   <antcall target="dita2agreement2Dita.process.elements">
