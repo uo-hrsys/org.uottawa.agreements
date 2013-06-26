@@ -9,6 +9,18 @@ Our collective agreements are bilingual documentation, side by side. We developp
 
 Later, when we started to use DITA XML, the need of a tool to export one format to the other was required.
 
+## Installation note
+
+This plugin is a standard DITA-OT plugin, it simply need to be installed in the plugins directory of the DITA-OT.
+You will need to add the xmltask.jar in the classpath. A copy of the library is provided in this installation. Simply add
+the following line to the startcmd.sh script at the root ot the DITA-OT installation.
+
+```Shell
+NEW_CLASSPATH="$DITA_DIR/plugins/org.uottawa.agreements/xmltask/xmltask.jar:$NEW_CLASSPATH"
+``` 
+
+The plugins works with version 1.7.* of the DITA-OT.
+
 ## Useage
 
 1. Ensure that your dtd is set properly at the top of the document
