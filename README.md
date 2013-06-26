@@ -45,3 +45,7 @@ or
 ``` 
 
 3.   In the out/union directory, you will find two directories, one for french (fr), one for english (en) containing your documentation
+
+## Medium term goal
+
+The medium term goal will be to write a DITA specialization, convert all existing documentation to DITA, provide a xsl to format collective agreements with the FO engine and discontinue the current solution.
