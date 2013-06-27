@@ -136,6 +136,9 @@
   <xsl:template match="list">
     <xsl:variable name="element">
       <xsl:choose>
+        <xsl:when test="count(*) = 0">
+        <!-- no nothing -->
+        </xsl:when>
         <xsl:when test="contains(@Type, 'alpha') or contains(@Type, 'numeric')">
           <xsl:value-of select="'ol'"/>
         </xsl:when>
