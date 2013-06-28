@@ -31,8 +31,13 @@
 
 
  <target name="dita2agreement2Dita.split.language">
-  <delete file="${temp.dir}/splitted.xml"></delete>
-  <xslt in="${args.input}" out="${temp.dir}/splitted.xml" style="${dita2agreement2Dita.dir}/xsl/filter-${lang}.xsl">
+ 
+ <echo>
+  	+++ Processing ${args.input} with ${dita2agreement2Dita.dir}/xsl/filter-${lang}.xsl to ${temp.dir}/splitted-${lang}.xml
+  </echo>
+  
+  <delete file="${temp.dir}/splitted-${lang}.xml"></delete>
+  <xslt in="${args.input}" out="${temp.dir}/splitted-${lang}.xml" style="${dita2agreement2Dita.dir}/xsl/filter-${lang}.xsl">
    <factory name="net.sf.saxon.TransformerFactoryImpl"></factory>
    <xmlcatalog>
     <dtd publicId="-//uottawa//agreement.dtd" location="dtd/agreement.dtd"></dtd>
@@ -41,16 +46,18 @@
  </target>
 
  <target name="dita2agreement2Dita.process.elements" depends="dita2agreement2Dita.split.language">
-   
-  <xslt in="${temp.dir}/splitted.xml" out="${temp.dir}/step-1-${lang}.xml" style="${dita2agreement2Dita.dir}/xsl/step-1.xsl" force="true" failOnError="false">
+  
+  <xslt in="${temp.dir}/splitted-${lang}.xml" out="${temp.dir}/step-1-${lang}.xml" style="${dita2agreement2Dita.dir}/xsl/step-1.xsl" force="true" failOnError="false">
    <factory name="net.sf.saxon.TransformerFactoryImpl"></factory>
   </xslt>
   
-  <xslt in="${temp.dir}/step-1-${lang}.xml" out="${src.dir}/step-2-${lang}.xml" style="${dita2agreement2Dita.dir}/xsl/step-2.xsl" force="true" failOnError="false">
+  <xslt in="${temp.dir}/step-1-${lang}.xml" out="${src.dir}/${lang}/step-2.xml" style="${dita2agreement2Dita.dir}/xsl/step-2.xsl" force="true" failOnError="false">
    <factory name="net.sf.saxon.TransformerFactoryImpl"></factory>
   </xslt>
+  
+  <mkdir dir="${src.dir}/${lang}"></mkdir>
 
-  <xslt basedir="${src.dir}" destdir="${output.dir}/${lang}" extension=".dita" style="${dita2agreement2Dita.dir}/xsl/main.xsl" filenameparameter="FILENAME" filedirparameter="DIRNAME" force="yes" reloadstylesheet="yes" failOnError="false">
+  <xslt basedir="${src.dir}/${lang}" destdir="${output.dir}/${lang}" extension=".dita" style="${dita2agreement2Dita.dir}/xsl/main.xsl" filenameparameter="FILENAME" filedirparameter="DIRNAME" force="yes" reloadstylesheet="yes" failOnError="false">
    <factory name="net.sf.saxon.TransformerFactoryImpl"></factory>
   </xslt>
 
