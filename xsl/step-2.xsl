@@ -136,9 +136,6 @@
   <xsl:template match="list">
     <xsl:variable name="element">
       <xsl:choose>
-        <xsl:when test="count(*) = 0">
-        <!-- no nothing -->
-        </xsl:when>
         <xsl:when test="contains(@Type, 'alpha') or contains(@Type, 'numeric')">
           <xsl:value-of select="'ol'"/>
         </xsl:when>
@@ -149,7 +146,7 @@
     </xsl:variable>
 
     <!-- prevent list nested in an item to be processed -->
-    <xsl:if test="name(preceding-sibling::*[1]) != 'item'">
+    <xsl:if test="name(preceding-sibling::*[1]) != 'item' and count(*) != 0">
     <xsl:element name="{$element}">
       <xsl:attribute name="outputclass">
         <xsl:value-of select="@Type"/>
