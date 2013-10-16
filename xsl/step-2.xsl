@@ -95,6 +95,19 @@
   <xsl:template match="@prefixLineOnly"> </xsl:template>
 
   <xsl:template match="table|tablewithoutRuling">
+  
+    <xsl:variable name="precedingSibling" select="name(preceding-sibling::*[1])" />
+    <xsl:variable name="precedingName" >
+      <xsl:choose>
+        <xsl:when test="$precedingSibling = 'item'">
+          <xsl:value-of select="'li'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'p'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$precedingName}">
     <table outputclass="{name(.)}">
       <xsl:element name="tgroup">
         <xsl:attribute name="cols">
@@ -103,6 +116,7 @@
         <xsl:apply-templates select="@*|node()"/>
       </xsl:element>
     </table>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="TableHeading">
@@ -153,7 +167,7 @@
       </xsl:attribute>
       
       <!-- select those items that differ from any of their predecessors -->
-      <xsl:apply-templates select="item[not(@type=preceding-sibling::list)]"/>
+      <xsl:apply-templates select="item[not(@type=preceding-sibling::list)]|table|tablewithoutRuling"/>
     </xsl:element>
     </xsl:if>
   </xsl:template>
@@ -174,7 +188,7 @@
         <ul>
           <xsl:for-each select="following-sibling::list[1]/item">
             <li>
-              <xsl:value-of select="."/>
+              <xsl:apply-templates select="@*|node()"/>
             </li>
           </xsl:for-each>
         </ul>
