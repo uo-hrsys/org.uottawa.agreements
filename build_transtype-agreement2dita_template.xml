@@ -7,36 +7,36 @@
     <dirname property="dita2agreement2Dita.dir" file="${ant.file.dita2agreementToDita}"/>
 
     <property name="temp.dir" value="${output.dir}/temp"/>
+    <property name="construct.dir" value="${output.dir}/construct"/>
     <property name="src.dir" value="${output.dir}/src"/>
- 
+
     <delete dir="${temp.dir}" />
     <delete dir="${src.dir}" />
- 
+
     <mkdir dir="${src.dir}"/>
     <mkdir dir="${temp.dir}"/>
+    <mkdir dir="${construct.dir}"/>
   </target>
- 
+
  <target name="dita2agreement2dita" depends="dita2agreement2Dita.init"> </target>
 
  <target name="dita2agreement2Dita.init" depends="define.xmlTask, dita2agreement2Dita.prepare, dita2agreement2Dita.processLanguage"/>
 
  <target name="dita2agreement2Dita.processLanguage" description="process agreement conversion in 2 languages">
+
   <antcall target="dita2agreement2Dita.process.elements">
    <param name="lang" value="fr"/>
   </antcall>
+
   <antcall target="dita2agreement2Dita.process.elements">
    <param name="lang" value="en"/>
   </antcall>
+
  </target>
 
 
  <target name="dita2agreement2Dita.split.language">
- 
- <echo>
-  	+++ Processing ${args.input} with ${dita2agreement2Dita.dir}/xsl/filter-${lang}.xsl to ${temp.dir}/splitted-${lang}.xml
-  </echo>
-  
-  <delete file="${temp.dir}/splitted-${lang}.xml" />
+
   <xslt in="${args.input}" out="${temp.dir}/splitted-${lang}.xml" style="${dita2agreement2Dita.dir}/xsl/filter-${lang}.xsl">
    <factory name="net.sf.saxon.TransformerFactoryImpl"/>
    <xmlcatalog>
@@ -46,17 +46,21 @@
  </target>
 
  <target name="dita2agreement2Dita.process.elements" depends="dita2agreement2Dita.split.language">
-  
+
   <xslt in="${temp.dir}/splitted-${lang}.xml" out="${temp.dir}/step-1-${lang}.xml"
    style="${dita2agreement2Dita.dir}/xsl/step-1.xsl" force="true" failOnError="false">
    <factory name="net.sf.saxon.TransformerFactoryImpl"/>
   </xslt>
-  
+
+  <move file="${temp.dir}/splitted-${lang}.xml" tofile="${construct.dir}/splitted-${lang}.xml"/>
+
   <xslt in="${temp.dir}/step-1-${lang}.xml" out="${src.dir}/${lang}/step-2.xml"
    style="${dita2agreement2Dita.dir}/xsl/step-2.xsl" force="true" failOnError="false">
    <factory name="net.sf.saxon.TransformerFactoryImpl"/>
   </xslt>
-  
+
+  <move file="${temp.dir}/step-1-${lang}.xml" tofile="${construct.dir}/step-1-${lang}.xml"/>
+
   <mkdir dir="${src.dir}/${lang}" />
 
   <xslt basedir="${src.dir}/${lang}" destdir="${output.dir}/${lang}" extension=".dita"
@@ -65,6 +69,14 @@
    <factory name="net.sf.saxon.TransformerFactoryImpl"/>
   </xslt>
 
+  <move file="${output.dir}/${lang}/step-2.dita" tofile="${construct.dir}/step-2.dita"/>
+
+  <xmlvalidate failonerror="yes" lenient="no" warn="yes">
+    <fileset dir="${output.dir}/${lang}" includes="*.dita"/>
+    <fileset dir="${output.dir}/${lang}" includes="*.ditamap"/>
+  </xmlvalidate>
+
  </target>
+
 
 </project>
