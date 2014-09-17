@@ -88,7 +88,7 @@
 
   <xsl:template match="paragraph">
     <xsl:choose>
-      <xsl:when test="name(preceding-sibling::*[1]) = 'item'">
+      <xsl:when test="name(ancestor::*[1]) = 'list'">
         <li outputclass="p"><p><xsl:apply-templates select="@*|node()"/></p></li>
       </xsl:when>
 
@@ -103,16 +103,19 @@
   <xsl:template match="@prefixMark"> </xsl:template>
 
   <xsl:template match="table|tablewithoutRuling">
+
     <xsl:choose>
       <xsl:when test="name(ancestor::*[1]) = 'list'">
-        <table outputclass="{name(.)}">
-          <xsl:element name="tgroup">
-            <xsl:attribute name="cols">
-              <xsl:value-of select="count(TableHeading/TableRow/TableCell)"/>
-            </xsl:attribute>
-            <xsl:apply-templates select="@*|node()"/>
-          </xsl:element>
-        </table>
+        <li>
+          <table outputclass="{name(.)}">
+            <xsl:element name="tgroup">
+              <xsl:attribute name="cols">
+                <xsl:value-of select="count(TableHeading/TableRow/TableCell)"/>
+              </xsl:attribute>
+              <xsl:apply-templates select="@*|node()"/>
+            </xsl:element>
+          </table>
+        </li>
       </xsl:when>
       <xsl:otherwise>
         <table outputclass="{name(.)}">
@@ -186,7 +189,7 @@
          </li>
        </xsl:if>
 
-      <xsl:apply-templates select="@*|item"/>
+      <xsl:apply-templates select="@*|node()[not(name(.) = 'list')]"/>
     </xsl:element>
 
     </xsl:if>
