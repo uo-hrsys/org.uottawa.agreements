@@ -103,15 +103,30 @@
   <xsl:template match="@prefixMark"> </xsl:template>
 
   <xsl:template match="table|tablewithoutRuling">
-    <table outputclass="{name(.)}">
-      <xsl:element name="tgroup">
-        <xsl:attribute name="cols">
-          <xsl:value-of select="count(TableHeading/TableRow/TableCell)"/>
-        </xsl:attribute>
-        <xsl:apply-templates select="@*|node()"/>
-      </xsl:element>
-    </table>
+    <xsl:choose>
+      <xsl:when test="name(ancestor::*[1]) = 'list'">
+        <table outputclass="{name(.)}">
+          <xsl:element name="tgroup">
+            <xsl:attribute name="cols">
+              <xsl:value-of select="count(TableHeading/TableRow/TableCell)"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="@*|node()"/>
+          </xsl:element>
+        </table>
+      </xsl:when>
+      <xsl:otherwise>
+        <table outputclass="{name(.)}">
+          <xsl:element name="tgroup">
+            <xsl:attribute name="cols">
+              <xsl:value-of select="count(TableHeading/TableRow/TableCell)"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="@*|node()"/>
+          </xsl:element>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
+
 
   <xsl:template match="TableHeading">
     <xsl:element name="thead">
