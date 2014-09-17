@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
   exclude-result-prefixes="xs ditaarch" version="2.0"
 >
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 
   <xsl:template match="@*|node()">
     <xsl:copy>
@@ -44,9 +45,9 @@
         <xsl:message>
           ! important Level 5 reached, this level has never been tested because no use case
         </xsl:message>
-        
+
         <xsl:value-of select="$article-level"/>.<xsl:value-of select="count(parent::section/parent::section/parent::section/parent::section/preceding-sibling::section|parent::section/parent::section/parent::section/preceding-sibling::paragraph-numbered)" />.<xsl:value-of select="count(parent::section/parent::section/parent::section/preceding-sibling::section|parent::section/parent::section/preceding-sibling::paragraph-numbered)" />.<xsl:value-of select="count(parent::section/parent::section/preceding-sibling::section|parent::section/preceding-sibling::paragraph-numbered)" />.<xsl:value-of select="count(preceding-sibling::paragraph-numbered) + 1 "/>
-        
+
       </xsl:when>
     </xsl:choose>
   </xsl:variable>
@@ -58,7 +59,6 @@
       </ph>
       <xsl:apply-templates select="@*|node()"/>
     </p>
-
   </xsl:template>
 
   <xsl:template match="article">
@@ -66,7 +66,7 @@
     <xsl:param name="count" tunnel="yes">
       <xsl:number count="article"/>
     </xsl:param>
-    
+
     <article id="{concat('article-', $count)}" outputclass="article">
       <xsl:apply-templates select="@*|node()">
         <xsl:with-param name="article-level" select="$count"/>
@@ -87,12 +87,20 @@
   </xsl:template>
 
   <xsl:template match="paragraph">
-    <xsl:element name="p">
-      <xsl:apply-templates select="@*|node()"/>
-    </xsl:element>
+    <xsl:choose>
+      <xsl:when test="name(preceding-sibling::*[1]) = 'item'">
+        <li outputclass="p"><p><xsl:apply-templates select="@*|node()"/></p></li>
+      </xsl:when>
+
+      <xsl:otherwise>
+        <p><xsl:apply-templates select="@*|node()"/></p>
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:template>
 
   <xsl:template match="@prefixLineOnly"> </xsl:template>
+  <xsl:template match="@prefixMark"> </xsl:template>
 
   <xsl:template match="table|tablewithoutRuling">
     <table outputclass="{name(.)}">
@@ -129,11 +137,17 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- 
+  <!--
     Process list
     possible choices are: Alpha, Alpha-uppercase, Numeric, Dash, Roman, Bullet
   -->
+
+  <xsl:template match="list/@Type" />
+
   <xsl:template match="list">
+
+  <xsl:if test="count(node())" >
+
     <xsl:variable name="element">
       <xsl:choose>
         <xsl:when test="contains(@Type, 'alpha') or contains(@Type, 'numeric')">
@@ -146,16 +160,31 @@
     </xsl:variable>
 
     <!-- prevent list nested in an item to be processed -->
-    <xsl:if test="name(preceding-sibling::*[1]) != 'item' and count(*) != 0">
     <xsl:element name="{$element}">
       <xsl:attribute name="outputclass">
         <xsl:value-of select="@Type"/>
       </xsl:attribute>
-      
-      <!-- select those items that differ from any of their predecessors -->
-      <xsl:apply-templates select="item[not(@type=preceding-sibling::list)]"/>
+
+       <xsl:if test="name(*[1]) = 'list'">
+         <li>
+           <xsl:apply-templates select="*[1]"/>
+         </li>
+       </xsl:if>
+
+      <xsl:apply-templates select="@*|item"/>
     </xsl:element>
+
     </xsl:if>
+  </xsl:template>
+
+  <!-- process item, move following list sibling into the previous parent item -->
+  <xsl:template match="item">
+    <li>
+       <xsl:apply-templates select="@*|node()"/>
+       <xsl:if test="name(following-sibling::*[1]) = 'list'">
+         <xsl:apply-templates select="following-sibling::*[1]"/>
+       </xsl:if>
+    </li>
   </xsl:template>
 
   <!-- process appendix -->
@@ -165,26 +194,6 @@
   <!-- process signature -->
   <!-- to be implemented -->
   <xsl:template match="signature"> </xsl:template>
-
-  <!-- process item, move following list sibling into the previous parent item -->
-  <xsl:template match="item">
-    <xsl:element name="li">
-      <xsl:apply-templates select="@*|node()"/>
-      <xsl:if test="name(following-sibling::*[1]) = 'list'">
-        <ul>
-          <xsl:for-each select="following-sibling::list[1]/item">
-            <li>
-              <xsl:value-of select="."/>
-            </li>
-          </xsl:for-each>
-        </ul>
-      </xsl:if>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="//@langue">
-    <xsl:apply-templates select="attribute::*[not(name()='langue')]|node()"/>
-  </xsl:template>
 
   <xsl:template match="strong">
     <b>
@@ -198,9 +207,9 @@
     </i>
   </xsl:template>
 
-  <xsl:template match="@prefixMark">
+  <!--xsl:template match="*[@prefixMark]">
     <xsl:if test="@prefixMark='y'"> * </xsl:if>
-  </xsl:template>
+  </xsl:template-->
 
   <xsl:template name="addNumbering">
     <xsl:param name="num"/>

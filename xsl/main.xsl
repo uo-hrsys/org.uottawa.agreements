@@ -4,11 +4,11 @@
 
 
 	<xsl:output name="dita-concept" method="xml" doctype-public="-//OASIS//DTD DITA Concept//EN"
-		doctype-system="technicalContent/dtd/concept.dtd"/>
+		doctype-system="technicalContent/dtd/concept.dtd" indent="yes"/>
 
 	<xsl:output name="dita-ditamap" method="xml" doctype-public="-//OASIS//DTD DITA Map//EN"
-		doctype-system="technicalContent/dtd/map.dtd"/>
-	
+		doctype-system="technicalContent/dtd/map.dtd"  indent="yes"/>
+
 	<xsl:include href="cc2dita_main_keys.xsl"/>
 
 	<xsl:template match="@*|node()">
@@ -19,7 +19,7 @@
 
 
 	<xsl:template match="agreement">
-		
+
 		<xsl:for-each select="article">
 
 		<xsl:message>
@@ -37,15 +37,15 @@
 			</concept>
 
 		</xsl:result-document>
-		
-		
+
+
 		</xsl:for-each>
-	
+
 		<xsl:apply-templates mode="generate-main-keys" select="/"/>
 		<xsl:apply-templates mode="generate-main-map" select="/"/>
-		
-	
-	
+
+
+
 	</xsl:template>
 
 	<xsl:template match="title"/>
