@@ -14,7 +14,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     </xsl:choose>
   </xsl:template>
 
-   <xsl:template match="tablewithoutRuling">
+  <xsl:template match="tablewithoutRuling">
     <xsl:variable name="lang" select="preceding-sibling::*[1][@langue='fr' or @langue='en' or @langue='fr-ca' or @langue ='en-ca']/@langue"/>
     <xsl:choose>
       <xsl:when test="contains($lang,'en')">
