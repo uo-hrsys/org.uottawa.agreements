@@ -53,7 +53,7 @@
   </xsl:variable>
 
   <xsl:variable name="id" select="replace($ref, '\.', '-')"/>
-    <p id="id-{replace($id, '\.', '-')}">
+    <p>
       <ph outputclass="num">
         <xsl:value-of select="$ref"/>
       </ph>

@@ -53,8 +53,6 @@
 
     <xsl:variable name="ref"><xsl:value-of select="count(ancestor::article/preceding-sibling::article) + 1 " />-<xsl:number count="sub-article | section" from="article" grouping-separator="-" />-<xsl:number count="paragraph-numbered|title" grouping-separator="-" level="single" from="section|sub-article" /></xsl:variable>
     <p>
-      <xsl:attribute name="id">ca-art-<xsl:value-of select="$ref" /></xsl:attribute>
-
       <xsl:call-template name="addNumbering">
         <xsl:with-param name="num"><xsl:value-of select="count(ancestor::article/preceding-sibling::article) + 1 " />.<xsl:number count="sub-article | section" from="article" grouping-separator="." />.<xsl:number count="paragraph-numbered|title" grouping-separator="." level="single" from="section|sub-article" /></xsl:with-param>
       </xsl:call-template>
