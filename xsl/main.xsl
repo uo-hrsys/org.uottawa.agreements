@@ -42,7 +42,7 @@
           </title>
           <shortdesc/>
           <conbody>
-            <xsl:apply-templates select="@*|node()"/>
+            <xsl:apply-templates select="@*[name()!='id']|node()"/>
           </conbody>
         </concept>
       </xsl:result-document>

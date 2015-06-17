@@ -56,7 +56,7 @@
     <p>
       <ph outputclass="num">
         <xsl:value-of select="$ref"/>
-      </ph>
+      </ph><xsl:value-of select="'&#160;'"/>
       <xsl:apply-templates select="@*|node()"/>
     </p>
   </xsl:template>
@@ -78,12 +78,12 @@
     <xsl:variable name="count">
       <xsl:number count="article"/>
     </xsl:variable>
-    <title> ARTICLE <xsl:value-of select="$count"/> : <xsl:apply-templates select="node()"/>
+    <title> Article <xsl:value-of select="$count"/> : <xsl:apply-templates select="node()"/>
     </title>
   </xsl:template>
 
   <xsl:template match="title/text()">
-    <xsl:value-of select="upper-case(.)"/>
+    <xsl:value-of select="lower-case(.)"/>
   </xsl:template>
 
   <xsl:template match="paragraph">
@@ -231,9 +231,7 @@
 
   <xsl:template name="addNumbering">
     <xsl:param name="num"/>
-    <ph outputclass="num">
-      <xsl:value-of select="$num"/>
-    </ph>
+    <ph outputclass="num"><xsl:value-of select="$num"/><xsl:value-of select="'&#160;'"/></ph>
   </xsl:template>
 
 </xsl:stylesheet>

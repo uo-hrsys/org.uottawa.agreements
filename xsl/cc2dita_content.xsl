@@ -69,7 +69,7 @@
 
   <xsl:template name="addNumbering">
     <xsl:param name="num" />
-    <ph outputclass="num"><xsl:value-of select="$num" /></ph>
+    <ph outputclass="num"><xsl:value-of select="$num" /><xsl:value-of select="'&#160;'"/></ph>
   </xsl:template>
 
 </xsl:stylesheet>
