@@ -67,7 +67,7 @@
       <xsl:number count="article"/>
     </xsl:param>
 
-    <article id="{concat('article-', $count)}" outputclass="article">
+    <article id="{concat('article-', $count)}">
       <xsl:apply-templates select="@*|node()">
         <xsl:with-param name="article-level" select="$count"/>
       </xsl:apply-templates>
