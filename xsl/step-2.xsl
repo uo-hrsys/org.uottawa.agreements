@@ -82,6 +82,10 @@
     </title>
   </xsl:template>
 
+  <xsl:template match="title-no-number">
+    <p><b><xsl:value-of select="."/></b></p>
+  </xsl:template>
+
   <xsl:template match="title/text()">
     <xsl:value-of select="lower-case(.)"/>
   </xsl:template>
