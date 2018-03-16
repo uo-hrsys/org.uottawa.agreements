@@ -33,7 +33,7 @@
 
     <xsl:for-each select="article">
       <xsl:message>
-        Processing article <xsl:value-of select="@id"/>
+        Processing articles <xsl:value-of select="@id"/>
       </xsl:message>
       <xsl:result-document format="dita-concept" href="{@id}.dita">
         <concept id="{@id}">
@@ -47,6 +47,58 @@
         </concept>
       </xsl:result-document>
     </xsl:for-each>
+
+    <xsl:for-each select="letter">
+      <xsl:variable name="num">
+        <xsl:number value="position()" format="1" />
+      </xsl:variable>
+      <xsl:message>
+        Processing letters <xsl:value-of select="string($num)"/>
+      </xsl:message>
+      <xsl:result-document format="dita-concept" href="letter-{string($num)}.dita">
+        <concept id="letter-{$num}">
+            <xsl:choose>
+              <xsl:when test="title[0]">
+                <xsl:sequence select="title[0]" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:sequence select="title[1]" />
+              </xsl:otherwise>
+            </xsl:choose>
+          <shortdesc/>
+          <conbody>
+            <xsl:apply-templates select="@*[name()!='id']|node()"/>
+          </conbody>
+        </concept>
+      </xsl:result-document>
+    </xsl:for-each>
+
+
+    <xsl:for-each select="other-letters">
+      <xsl:variable name="num">
+        <xsl:number value="position()" format="1" />
+      </xsl:variable>
+      <xsl:message>
+        Processing other-letters <xsl:value-of select="string($num)"/>
+      </xsl:message>
+      <xsl:result-document format="dita-concept" href="other-letters-{string($num)}.dita">
+        <concept id="other-letters-{$num}">
+            <xsl:choose>
+              <xsl:when test="title[0]">
+                <xsl:sequence select="title[0]" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:sequence select="title[1]" />
+              </xsl:otherwise>
+            </xsl:choose>
+          <shortdesc/>
+          <conbody>
+            <xsl:apply-templates select="@*[name()!='id']|node()"/>
+          </conbody>
+        </concept>
+      </xsl:result-document>
+    </xsl:for-each>
+
 
     <xsl:apply-templates mode="generate-main-keys" select="/"/>
     <xsl:apply-templates mode="generate-main-map" select="/"/>

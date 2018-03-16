@@ -74,12 +74,55 @@
     </article>
   </xsl:template>
 
+  <xsl:template match="letter">
+
+    <xsl:param name="count" tunnel="yes">
+      <xsl:number count="letter"/>
+    </xsl:param>
+
+    <letter id="{concat('letter-', $count)}">
+      <xsl:apply-templates select="@*|node()">
+        <xsl:with-param name="article-level" select="$count"/>
+      </xsl:apply-templates>
+    </letter>
+  </xsl:template>
+
+  <xsl:template match="other-letters">
+
+    <xsl:param name="count" tunnel="yes">
+      <xsl:number count="other-letters"/>
+    </xsl:param>
+
+    <other-letters id="{concat('other-letters-', $count)}">
+      <xsl:apply-templates select="@*|node()">
+        <xsl:with-param name="article-level" select="$count"/>
+      </xsl:apply-templates>
+    </other-letters>
+  </xsl:template>
+
   <xsl:template match="title">
     <xsl:variable name="count">
       <xsl:number count="article"/>
     </xsl:variable>
     <title> Article <xsl:value-of select="$count"/> : <xsl:apply-templates select="node()"/>
     </title>
+  </xsl:template>
+
+  <xsl:template match="title-prefix">
+    <title>
+     <!--ph outputclass="lb"><xsl:apply-templates select="node()"/></ph-->
+     <ph outputclass="lb"><xsl:value-of select="following-sibling::*[1]"/></ph>
+    </title>
+  </xsl:template>
+
+  <xsl:template match="letter/paragraph-numbered">
+    <title>
+      <ph outputclass="lb"><xsl:apply-templates select="node()"/></ph>
+    </title>
+  </xsl:template>
+
+  <xsl:template match="sub-letter">
+    <xsl:apply-templates select="node()"/>
   </xsl:template>
 
   <xsl:template match="title-no-number">

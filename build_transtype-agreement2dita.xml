@@ -63,6 +63,7 @@
 
   <xslt basedir="${src.dir}/${lang}" destdir="${output.dir}/${lang}" extension=".dita" style="${dita2agreement2Dita.dir}/xsl/main.xsl" filenameparameter="FILENAME" filedirparameter="DIRNAME" force="yes" reloadstylesheet="yes" failOnError="false">
    <factory name="net.sf.saxon.TransformerFactoryImpl"></factory>
+   <param name="lang" expression="${lang}"></param>
   </xslt>
 
   <move file="${output.dir}/${lang}/step-2.dita" tofile="${construct.dir}/step-2.dita"></move>
